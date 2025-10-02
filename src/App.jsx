@@ -12,10 +12,12 @@ import './App.css';
 //   </div>
 // };
 
-function App() {
+export const App = () => {
+	// декларативный
 	const [count, setCount] = useState(0);
+	// императивный
 	let year = new Date().getFullYear();
-
+	// декларативный
 	return (
 		<>
 			<div>
@@ -28,6 +30,7 @@ function App() {
 			</div>
 			<h1>Vite + React</h1>
 			<div className="card">
+				{/* императивный (функция обработки события по клику) */}
 				<button onClick={() => setCount((count) => count + 1)}>
 					count is {count}
 				</button>
@@ -51,4 +54,4 @@ function App() {
 	);
 }
 
-export default App;
+// export default App;
