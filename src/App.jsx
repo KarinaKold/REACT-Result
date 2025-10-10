@@ -17,7 +17,7 @@ export function App() {
 		}
 	}
 
-	const isValueValid = value.length >= 3;
+	const isValueValid = value && (value.length >= 3);
 
 	function onAddButtonClick() {
 		const updatedList = [...list, { id: Date.now(), value }];
