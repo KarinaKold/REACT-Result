@@ -19,8 +19,10 @@ export function App() {
 
 	const isValueValid = value && (value.length >= 3);
 
+	const dateNow = new Date().toLocaleString('ru-RU').replace(/,/g, "");
+
 	function onAddButtonClick() {
-		const updatedList = [...list, { id: Date.now(), value }];
+		const updatedList = [...list, { id: dateNow, value }];
 		setList(updatedList);
 		setValue('');
 		setError('');
@@ -54,7 +56,7 @@ export function App() {
 					<ul className="list">
 						{list.map(({ id, value }) => (
 							<li className="list-item" key={id}>
-								{[id, value]}
+								<span>{value}</span>   <span>{id}</span>
 							</li>
 						))}
 					</ul>
