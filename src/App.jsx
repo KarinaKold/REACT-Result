@@ -10,13 +10,40 @@ export const App = () => {
 	const [operator, setOperator] = useState('');
 	const [result, setResult] = useState('');
 
-	const toDisplay = (num) => {
+	const [isResult, setIsResult] = useState(false);
+
+	const toDisplay = (btn) => {
+		if (btn === 'C') {
+		clearDisplay();
+		} else if (btn === '=') {
+		calculate();
+		} else if (OPERATORS.includes(btn)) {
+		onClickOperator(btn);
+		} else {
+		onClickNum(btn);
+		}
+	};
+
+	const onClickNum = (num) => {
+		if (isResult) {
+			setOperand1(result.toString() + num);
+			setIsResult(false);
+		} else {
 		if (operator) {
         setOperand2(operand2 + num);
       } else {
         setOperand1(operand1 + num);
       }
+	}
+	};
 
+	const onClickOperator = (oper) => {
+		if (isResult) {
+			setOperator(oper);
+			setIsResult(false);
+		} else if (operand1 && !operator) {
+		setOperator(oper);
+		}
 	};
 
 	const clearDisplay = () => {
@@ -24,25 +51,30 @@ export const App = () => {
 		setOperand2('');
 		setOperator('');
 		setResult('');
+		setIsResult(false);
 	};
 
 	const calculate = () => {
+		if (operand1 && operand2) {
 		let res;
 		switch (operator) {
         case '+':
-          res = operand1 + operand2;
+			res = +operand1 + +operand2;
           break;
         case '-':
-          res = operand1 - operand2;
+          res = +operand1 - +operand2;
 		  break;
         default:
           return;
 		}
 
-		setResult(`${operand1} ${operator} ${operand2} = ${res}`);
-		setOperand1('');
+		setResult(res);
+		console.log(typeof res);
+		setOperand1(res);
 		setOperand2('');
 		setOperator('');
+		setIsResult(true);
+	}
 	};
 
 	const orderOfNUMS = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
@@ -50,17 +82,18 @@ export const App = () => {
 
 	return (
     <div className={styles.calculator}>
-        <div className={styles.display}>{result}</div>
+        <div className={styles.display}>{!isResult ? (`${operand1} ${operator} ${operand2}`) : result}</div>
         <div className={styles.buttons}>
 			<div className={styles.buttonsOperator}>
-				<button className={styles.btn} onClick={clearDisplay}>C</button>
-				<button className={styles.btn + ' ' + styles.operator} onClick={toDisplay}>-</button>
-				<button className={styles.btn + ' ' + styles.operator} onClick={toDisplay}>+</button>
-				<button className={styles.btn + ' ' + styles.result} onClick={calculate}>=</button>
+				{OPERATORS.map((operator) => (
+					<button className={styles.btn} key={operator} onClick={() => toDisplay(operator)}>
+					{operator}
+					</button>
+				))}
 			</div>
 			<div className={styles.buttonsNUMS}>
 				{sortedNums.map((num) => {
-					return <button className={styles.btn} onClick={toDisplay} key={num}>{num}</button>
+					return <button className={styles.btn} onClick={() => toDisplay(num)} key={num}>{num}</button>
 				})}
 			</div>
         </div>
