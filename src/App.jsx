@@ -37,12 +37,15 @@ export const App = () => {
 			if (operator) {
 				if (operand2 !== '0') {
 					setOperand2(operand2 + num);
-				} else {setOperand2(num)}
-
+				} else {
+					setOperand2(num);
+				}
 			} else {
 				if (operand1 !== '0') {
 					setOperand1(operand1 + num);
-				} else {setOperand1(num)}
+				} else {
+					setOperand1(num);
+				}
 			}
 		}
 	};
@@ -88,12 +91,13 @@ export const App = () => {
 
 	return (
 		<div className={styles.calculator}>
-			{!isResult ?
-			<div className={styles.display}>
-				{`${operand1} ${operator} ${operand2}`}
-			</div> :
-			<div className={styles.display + ' ' + styles.result}>{result}</div>
-			}
+			{!isResult ? (
+				<div className={styles.display}>
+					{`${operand1} ${operator} ${operand2}`}
+				</div>
+			) : (
+				<div className={styles.display + ' ' + styles.result}>{result}</div>
+			)}
 			<div className={styles.buttons}>
 				<div className={styles.buttonsOperator}>
 					{OPERATORS.map((operator) => (
