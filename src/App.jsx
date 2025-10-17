@@ -9,7 +9,7 @@ export const App = () => {
 	const [operand1, setOperand1] = useState('');
 	const [operand2, setOperand2] = useState('');
 	const [operator, setOperator] = useState('');
-	const [result, setResult] = useState('');
+	const [result, setResult] = useState('0');
 
 	const [isResult, setIsResult] = useState(false);
 
@@ -27,13 +27,22 @@ export const App = () => {
 
 	const onClickNum = (num) => {
 		if (isResult) {
-			setOperand1(result.toString() + num);
 			setIsResult(false);
+			if (result == '0' || operand1 == '0') {
+				setOperand1(num);
+			} else {
+				setOperand1(result + num);
+			}
 		} else {
 			if (operator) {
-				setOperand2(operand2 + num);
+				if (operand2 !== '0') {
+					setOperand2(operand2 + num);
+				} else {setOperand2(num)}
+
 			} else {
-				setOperand1(operand1 + num);
+				if (operand1 !== '0') {
+					setOperand1(operand1 + num);
+				} else {setOperand1(num)}
 			}
 		}
 	};
@@ -51,7 +60,7 @@ export const App = () => {
 		setOperand1('');
 		setOperand2('');
 		setOperator('');
-		setResult('');
+		setResult('0');
 		setIsResult(false);
 	};
 
