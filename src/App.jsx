@@ -28,24 +28,14 @@ export const App = () => {
 	const onClickNum = (num) => {
 		if (isResult) {
 			setIsResult(false);
-			if (result == '0' || operand1 == '0') {
-				setOperand1(num);
-			} else {
-				setOperand1(result + num);
-			}
+			result == '0' || operand1 == '0'
+				? setOperand1(num)
+				: setOperand1(result + num);
 		} else {
 			if (operator) {
-				if (operand2 !== '0') {
-					setOperand2(operand2 + num);
-				} else {
-					setOperand2(num);
-				}
+				operand2 !== '0' ? setOperand2(operand2 + num) : setOperand2(num);
 			} else {
-				if (operand1 !== '0') {
-					setOperand1(operand1 + num);
-				} else {
-					setOperand1(num);
-				}
+				operand1 !== '0' ? setOperand1(operand1 + num) : setOperand1(num);
 			}
 		}
 	};
