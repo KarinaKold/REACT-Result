@@ -57,10 +57,10 @@ export const App = () => {
 	};
 
 	const clearDisplay = () => {
-		setOperand1('');
+		setOperand1('0');
 		setOperand2('');
 		setOperator('');
-		setResult('0');
+		setResult('');
 		setIsResult(false);
 	};
 
