@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Field } from '../Field/Field';
 import { Information } from '../Information/Information';
 import styles from './app.module.css';
@@ -23,3 +24,13 @@ export const AppLayout = ({
 		</div>
 	);
 };
+
+AppLayout.propTypes = {
+	field: PropTypes.array,
+	isDraw: PropTypes.bool,
+	isGameEnded: PropTypes.bool,
+	currentPlayer: PropTypes.string,
+	checkWin: PropTypes.func,
+	onClickCell: PropTypes.func,
+	restart: PropTypes.func
+}
