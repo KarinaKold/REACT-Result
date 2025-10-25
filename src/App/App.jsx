@@ -41,14 +41,14 @@ export const App = () => {
 	};
 
 	return (
-		<><AppLayout
+		<AppLayout
 			currentPlayer={currentPlayer}
 			field={field}
 			isDraw={isDraw}
 			isGameEnded={isGameEnded}
 			onClickCell={onClickCell}
-			checkWin={checkWin} /><button onClick={restart}>
-				Начать заново
-			</button></>
+			checkWin={checkWin}
+			restart={restart}
+		/>
 	);
 };

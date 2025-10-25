@@ -1,5 +1,5 @@
-import { FieldLayout } from '../Field/FieldLayout';
-import { InformationLayout } from '../Information/InformationLayout';
+import { Field } from '../Field/Field';
+import { Information } from '../Information/Information';
 import styles from './app.module.css';
 
 export const AppLayout = ({
@@ -9,15 +9,17 @@ export const AppLayout = ({
 	currentPlayer,
 	checkWin,
 	onClickCell,
+	restart,
 }) => {
 	return (
 		<div className={styles.app}>
-			<InformationLayout
+			<Information
 				isDraw={isDraw}
 				isGameEnded={isGameEnded}
 				currentPlayer={currentPlayer}
 			/>
-			<FieldLayout field={field} checkWin={checkWin} onClickCell={onClickCell} />
+			<Field field={field} checkWin={checkWin} onClickCell={onClickCell} />
+			<button onClick={restart}>Начать заново</button>
 		</div>
 	);
 };
