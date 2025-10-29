@@ -47,7 +47,6 @@ export const App = () => {
 			isDraw={isDraw}
 			isGameEnded={isGameEnded}
 			onClickCell={onClickCell}
-			checkWin={checkWin}
 			restart={restart}
 		/>
 	);

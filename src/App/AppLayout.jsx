@@ -8,7 +8,6 @@ export const AppLayout = ({
 	isDraw,
 	isGameEnded,
 	currentPlayer,
-	checkWin,
 	onClickCell,
 	restart,
 }) => {
@@ -19,7 +18,7 @@ export const AppLayout = ({
 				isGameEnded={isGameEnded}
 				currentPlayer={currentPlayer}
 			/>
-			<Field field={field} checkWin={checkWin} onClickCell={onClickCell} />
+			<Field field={field} onClickCell={onClickCell} />
 			<button onClick={restart}>Начать заново</button>
 		</div>
 	);
@@ -30,7 +29,6 @@ AppLayout.propTypes = {
 	isDraw: PropTypes.bool,
 	isGameEnded: PropTypes.bool,
 	currentPlayer: PropTypes.string,
-	checkWin: PropTypes.func,
 	onClickCell: PropTypes.func,
 	restart: PropTypes.func
 }
