@@ -29,13 +29,14 @@ export const App = () => {
 
 	const submitBtnRef = useRef(null);
 
-
 	const onSubmit = (event) => {
 		event.preventDefault();
 		sendFormData(getState());
 		submitBtnRef.current.focus();
 	};
 	const { email, password, confirmPassword } = getState();
+
+	const onChange = ({target}) => updateState(target.name, target.value)
 
 	return (
 		<>
@@ -48,7 +49,7 @@ export const App = () => {
 						type="email"
 						placeholder="Почта"
 						value={email}
-						onChange={({ target }) => updateState('email', target.value)}
+						onChange={onChange}
 					/>
 					{emailError && <div className={styles.errorLabel}>{emailError}</div>}
 					<label>Пароль</label>
@@ -57,7 +58,7 @@ export const App = () => {
 						type="password"
 						placeholder="Пароль"
 						value={password}
-						onChange={({ target }) => updateState('password', target.value)}
+						onChange={onChange}
 					/>
 					{passwordError && (
 						<div className={styles.errorLabel}>{passwordError}</div>
@@ -68,7 +69,7 @@ export const App = () => {
 						type="password"
 						placeholder="Пароль"
 						value={confirmPassword}
-						onChange={({ target }) => updateState('confirmPassword', target.value)}
+						onChange={onChange}
 					/>
 					{confirmPasswordError && (
 						<div className={styles.errorLabel}>{confirmPasswordError}</div>
