@@ -1,21 +1,7 @@
 import { useState, useRef } from 'react';
 import styles from './App.module.css';
-
-const initialDataState = {
-	email: '',
-	password: '',
-	confirmPassword: '',
-};
-const useStore = () => {
-	const [state, setState] = useState(initialDataState);
-	return {
-		getState: () => state,
-		updateState: (fieldName, newValue) => {
-			setState({ ...state, [fieldName]: newValue });
-		},
-		resetState: () => setState(initialDataState),
-	};
-};
+import { useStore } from './store';
+import { validateEmail, validatePassword } from './validation';
 
 const sendFormData = (formData) => {
 	console.log(formData);
@@ -23,19 +9,8 @@ const sendFormData = (formData) => {
 
 export const App = () => {
 	const { getState, updateState, resetState } = useStore();
-	// const [emailError, setEmailError] = useState(null);
-	// const [passwordError, setPasswordError] = useState(null);
-	// const [confirmPasswordError, setConfirmPasswordError] = useState(null);
 	const [errors, setErrors] = useState({});
 	const submitBtnRef = useRef(null);
-
-	// 	const validateEmail = (email) => {
-	//     return /S+@S+.S+/.test(email);
-	//   };
-
-	//   const validatePassword = (password) => {
-	//     return /^[w]{6,20}$/.test(password);
-	//   };
 
 	const onSubmit = (event) => {
 		event.preventDefault();
@@ -50,36 +25,25 @@ export const App = () => {
 
 		let error = '';
 
-		if (
-			target.name === 'email' &&
-			/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(target.value)
-		) {
-			error = '';
-		}
+		const validItems = {
+			email: validateEmail(target.value),
+			password: validatePassword(target.value),
+			confirmPassword: target.value === password,
+		};
 
-		if (target.name === 'password' && /^.{6,20}$/.test(target.value)) {
-			error = '';
-		}
-
-		if (target.name === 'confirmPassword' && target.value === password) {
-			error = '';
-		}
+		if (target.name in validItems) error = '';
 
 		setErrors((prev) => ({ ...prev, [target.name]: error }));
 	};
 
 	const onBlur = ({ target }) => {
-
 		let error = '';
 
-		if (
-			target.name === 'email' &&
-			!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(target.value)
-		) {
-			target.name = 'Email должен быть в виде user@email.com';
+		if (target.name === 'email' && !validateEmail(target.value)) {
+			error = 'Email должен быть в виде user@email.com';
 		}
 
-		if (target.name === 'password' && !/^.{6,20}$/.test(target.value)) {
+		if (target.name === 'password' && !validatePassword(target.value)) {
 			error = 'Пароль должен содержать не менее 6 и не более 20 символов';
 		}
 
@@ -88,11 +52,12 @@ export const App = () => {
 		}
 
 		setErrors((prev) => ({ ...prev, [target.name]: error }));
+
+		isFormValid && submitBtnRef.current.focus();
 	};
 
 	const isFormValid =
 		email && password && confirmPassword && !Object.values(errors).some((err) => err);
-
 
 	return (
 		<>
@@ -108,9 +73,7 @@ export const App = () => {
 						onChange={onChange}
 						onBlur={onBlur}
 					/>
-					{errors.email && (
-						<div className={styles.error}>{errors.email}</div>
-					)}
+					{errors.email && <div className={styles.error}>{errors.email}</div>}
 					<label>Пароль</label>
 					<input
 						name="password"
@@ -135,9 +98,7 @@ export const App = () => {
 					{errors.confirmPassword && (
 						<div className={styles.error}>{errors.confirmPassword}</div>
 					)}
-					<button type="submit"
-					ref={submitBtnRef}
-					disabled={!isFormValid}>
+					<button type="submit" ref={submitBtnRef} disabled={!isFormValid}>
 						Зарегистрироваться
 					</button>
 				</form>
