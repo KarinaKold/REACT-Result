@@ -1,7 +1,11 @@
-import { useState, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+import { useRef } from 'react';
 import styles from './App.module.css';
-import { useStore } from './store';
-import { validateEmail, validatePassword } from './validation';
+// import { useStore } from './store';
+// import { validateEmail, validatePassword } from './validation';
 
 const errorMessages = {
 	email: 'Email должен быть в виде user@email.com',
@@ -13,106 +17,78 @@ const sendFormData = (formData) => {
 	console.log(formData);
 };
 
+const schema = yup
+	.object()
+	.shape({
+		email: yup.string().email(errorMessages.email).required('Email обязателен'),
+		password: yup
+			.string()
+			.matches(/^.{6,20}$/, errorMessages.password)
+			.required('Пароль обязателен'),
+		confirmPassword: yup
+			.string()
+			.oneOf([yup.ref('password')], errorMessages.confirmPassword)
+			.required('Повтор пароля обязателен'),
+	})
+	.required();
+
 export const App = () => {
-	const { getState, updateState, resetState } = useStore();
-	const [errors, setErrors] = useState({});
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		defaultValues: {
+			email: '',
+			password: '',
+			confirmPassword: '',
+		},
+		resolver: yupResolver(schema),
+		mode: 'onChange',
+		reValidateMode: 'onBlur',
+	});
+
+	// const { resetState } = useStore();
 	const submitBtnRef = useRef(null);
 
-	const onSubmit = (event) => {
-		event.preventDefault();
-		sendFormData(getState());
-		resetState();
-	};
-
-	const { email, password, confirmPassword } = getState();
-
-	const onChange = ({ target }) => {
-		updateState(target.name, target.value);
-
-		let error = '';
-
-		const validItems = {
-			email: validateEmail(target.value),
-			password: validatePassword(target.value),
-			confirmPassword: target.value === password,
-		};
-
-		if (target.name in validItems) error = '';
-
-		setErrors((prev) => ({ ...prev, [target.name]: error }));
-	};
-
-	const onBlur = ({ target }) => {
-		let error = '';
-
-		switch (target.name) {
-			case 'email':
-				if (!validateEmail(target.value)) {
-					error = errorMessages.email;
-				}
-				break;
-			case 'password':
-				if (!validatePassword(target.value)) {
-					error = errorMessages.password;
-				}
-				break;
-			case 'confirmPassword':
-				if (target.value !== password) {
-					error = errorMessages.confirmPassword;
-				}
-				break;
-			default:
-				break;
-		}
-
-		setErrors((prev) => ({ ...prev, [target.name]: error }));
-		isFormValid && submitBtnRef.current.focus();
-	};
-
-	const isFormValid =
-		email && password && confirmPassword && !Object.values(errors).some((err) => err);
+	const isFormValid = !Object.values(errors).some((err) => err);
+	// if (isFormValid) submitBtnRef.current.focus();
 
 	return (
 		<>
 			<h1>Регистрация</h1>
 			<div className={styles.app}>
-				<form onSubmit={onSubmit}>
+				<form onSubmit={handleSubmit(sendFormData)}>
 					<label htmlFor="email">Почта</label>
 					<input
+						{...register('email')}
 						id="email"
 						name="email"
 						type="email"
 						placeholder="Почта"
-						value={email}
-						onChange={onChange}
-						onBlur={onBlur}
 					/>
-					{errors.email && <div className={styles.error}>{errors.email}</div>}
+					{errors.email?.message && <div className={styles.error}>{errors.email?.message}</div>}
 					<label htmlFor="password">Пароль</label>
 					<input
+						{...register('password')}
 						id="password"
 						name="password"
 						type="password"
 						placeholder="Пароль"
-						value={password}
-						onChange={onChange}
-						onBlur={onBlur}
 					/>
-					{errors.password && (
-						<div className={styles.error}>{errors.password}</div>
+					{errors.password?.message && (
+						<div className={styles.error}>{errors.password?.message}</div>
 					)}
 					<label htmlFor="confirmPassword">Повторите пароль</label>
 					<input
+						{...register('confirmPassword')}
 						id="confirmPassword"
 						name="confirmPassword"
 						type="password"
 						placeholder="Пароль"
-						value={confirmPassword}
-						onChange={onChange}
-						onBlur={onBlur}
 					/>
-					{errors.confirmPassword && (
-						<div className={styles.error}>{errors.confirmPassword}</div>
+					{errors.confirmPassword?.message && (
+						<div className={styles.error}>{errors.confirmPassword?.message}</div>
 					)}
 					<button type="submit" ref={submitBtnRef} disabled={!isFormValid}>
 						Зарегистрироваться
