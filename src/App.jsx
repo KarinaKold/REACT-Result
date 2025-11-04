@@ -3,6 +3,12 @@ import styles from './App.module.css';
 import { useStore } from './store';
 import { validateEmail, validatePassword } from './validation';
 
+const errorMessages = {
+	email: 'Email должен быть в виде user@email.com',
+	password: 'Пароль должен содержать не менее 6 и не более 20 символов',
+	confirmPassword: 'Пароли не совпадают',
+};
+
 const sendFormData = (formData) => {
 	console.log(formData);
 };
@@ -39,20 +45,27 @@ export const App = () => {
 	const onBlur = ({ target }) => {
 		let error = '';
 
-		if (target.name === 'email' && !validateEmail(target.value)) {
-			error = 'Email должен быть в виде user@email.com';
-		}
-
-		if (target.name === 'password' && !validatePassword(target.value)) {
-			error = 'Пароль должен содержать не менее 6 и не более 20 символов';
-		}
-
-		if (target.name === 'confirmPassword' && target.value !== password) {
-			error = 'Пароли не совпадают';
+		switch (target.name) {
+			case 'email':
+				if (!validateEmail(target.value)) {
+					error = errorMessages.email;
+				}
+				break;
+			case 'password':
+				if (!validatePassword(target.value)) {
+					error = errorMessages.password;
+				}
+				break;
+			case 'confirmPassword':
+				if (target.value !== password) {
+					error = errorMessages.confirmPassword;
+				}
+				break;
+			default:
+				break;
 		}
 
 		setErrors((prev) => ({ ...prev, [target.name]: error }));
-
 		isFormValid && submitBtnRef.current.focus();
 	};
 
@@ -64,8 +77,9 @@ export const App = () => {
 			<h1>Регистрация</h1>
 			<div className={styles.app}>
 				<form onSubmit={onSubmit}>
-					<label>Почта</label>
+					<label htmlFor="email">Почта</label>
 					<input
+						id="email"
 						name="email"
 						type="email"
 						placeholder="Почта"
@@ -74,8 +88,9 @@ export const App = () => {
 						onBlur={onBlur}
 					/>
 					{errors.email && <div className={styles.error}>{errors.email}</div>}
-					<label>Пароль</label>
+					<label htmlFor="password">Пароль</label>
 					<input
+						id="password"
 						name="password"
 						type="password"
 						placeholder="Пароль"
@@ -86,8 +101,9 @@ export const App = () => {
 					{errors.password && (
 						<div className={styles.error}>{errors.password}</div>
 					)}
-					<label>Повторите пароль</label>
+					<label htmlFor="confirmPassword">Повторите пароль</label>
 					<input
+						id="confirmPassword"
 						name="confirmPassword"
 						type="password"
 						placeholder="Пароль"
