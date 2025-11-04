@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState, useRef } from 'react';
 import styles from './App.module.css';
 
 const initialDataState = {
@@ -13,6 +13,7 @@ const useStore = () => {
 		updateState: (fieldName, newValue) => {
 			setState({ ...state, [fieldName]: newValue });
 		},
+		resetState: () => setState(initialDataState),
 	};
 };
 
@@ -21,22 +22,77 @@ const sendFormData = (formData) => {
 };
 
 export const App = () => {
-	const { getState, updateState } = useStore();
-
-	const [emailError, setEmailError] = useState(null);
-	const [passwordError, setPasswordError] = useState(null);
-	const [confirmPasswordError, setConfirmPasswordError] = useState('');
-
+	const { getState, updateState, resetState } = useStore();
+	// const [emailError, setEmailError] = useState(null);
+	// const [passwordError, setPasswordError] = useState(null);
+	// const [confirmPasswordError, setConfirmPasswordError] = useState(null);
+	const [errors, setErrors] = useState({});
 	const submitBtnRef = useRef(null);
+
+	// 	const validateEmail = (email) => {
+	//     return /S+@S+.S+/.test(email);
+	//   };
+
+	//   const validatePassword = (password) => {
+	//     return /^[w]{6,20}$/.test(password);
+	//   };
 
 	const onSubmit = (event) => {
 		event.preventDefault();
 		sendFormData(getState());
-		submitBtnRef.current.focus();
+		resetState();
 	};
+
 	const { email, password, confirmPassword } = getState();
 
-	const onChange = ({target}) => updateState(target.name, target.value)
+	const onChange = ({ target }) => {
+		updateState(target.name, target.value);
+
+		let error = '';
+
+		if (
+			target.name === 'email' &&
+			/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(target.value)
+		) {
+			error = '';
+		}
+
+		if (target.name === 'password' && /^.{6,20}$/.test(target.value)) {
+			error = '';
+		}
+
+		if (target.name === 'confirmPassword' && target.value === password) {
+			error = '';
+		}
+
+		setErrors((prev) => ({ ...prev, [target.name]: error }));
+	};
+
+	const onBlur = ({ target }) => {
+
+		let error = '';
+
+		if (
+			target.name === 'email' &&
+			!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(target.value)
+		) {
+			target.name = 'Email должен быть в виде user@email.com';
+		}
+
+		if (target.name === 'password' && !/^.{6,20}$/.test(target.value)) {
+			error = 'Пароль должен содержать не менее 6 и не более 20 символов';
+		}
+
+		if (target.name === 'confirmPassword' && target.value !== password) {
+			error = 'Пароли не совпадают';
+		}
+
+		setErrors((prev) => ({ ...prev, [target.name]: error }));
+	};
+
+	const isFormValid =
+		email && password && confirmPassword && !Object.values(errors).some((err) => err);
+
 
 	return (
 		<>
@@ -50,8 +106,11 @@ export const App = () => {
 						placeholder="Почта"
 						value={email}
 						onChange={onChange}
+						onBlur={onBlur}
 					/>
-					{emailError && <div className={styles.errorLabel}>{emailError}</div>}
+					{errors.email && (
+						<div className={styles.error}>{errors.email}</div>
+					)}
 					<label>Пароль</label>
 					<input
 						name="password"
@@ -59,22 +118,26 @@ export const App = () => {
 						placeholder="Пароль"
 						value={password}
 						onChange={onChange}
+						onBlur={onBlur}
 					/>
-					{passwordError && (
-						<div className={styles.errorLabel}>{passwordError}</div>
+					{errors.password && (
+						<div className={styles.error}>{errors.password}</div>
 					)}
-					<label htmlFor="">Повторить пароль</label>
+					<label>Повторите пароль</label>
 					<input
 						name="confirmPassword"
 						type="password"
 						placeholder="Пароль"
 						value={confirmPassword}
 						onChange={onChange}
+						onBlur={onBlur}
 					/>
-					{confirmPasswordError && (
-						<div className={styles.errorLabel}>{confirmPasswordError}</div>
+					{errors.confirmPassword && (
+						<div className={styles.error}>{errors.confirmPassword}</div>
 					)}
-					<button type="submit" ref={submitBtnRef} disabled={!!emailError}>
+					<button type="submit"
+					ref={submitBtnRef}
+					disabled={!isFormValid}>
 						Зарегистрироваться
 					</button>
 				</form>

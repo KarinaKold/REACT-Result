@@ -8,3 +8,7 @@
 .app {
 	width: 300px;
 }
+
+.error {
+	color: red;
+}
