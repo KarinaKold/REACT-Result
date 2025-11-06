@@ -1,34 +1,13 @@
 import { useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { schema } from './validation';
 
 import styles from './App.module.css';
-
-const errorMessages = {
-	email: 'Email должен быть в виде user@email.com',
-	password: 'Пароль должен содержать не менее 6 и не более 20 символов',
-	confirmPassword: 'Пароли не совпадают',
-};
 
 const sendFormData = (formData) => {
 	console.log(formData);
 };
-
-const schema = yup
-	.object()
-	.shape({
-		email: yup.string().email(errorMessages.email).required('Email обязателен'),
-		password: yup
-			.string()
-			.matches(/^.{6,20}$/, errorMessages.password)
-			.required('Пароль обязателен'),
-		confirmPassword: yup
-			.string()
-			.oneOf([yup.ref('password')], errorMessages.confirmPassword)
-			.required('Повтор пароля обязателен'),
-	})
-	.required();
 
 export const App = () => {
 	const {
