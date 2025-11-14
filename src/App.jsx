@@ -4,6 +4,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from './validation';
 
 import styles from './App.module.css';
+import { Field } from './components/Field/Field';
+
+const FIELD_LABELS = {
+	email: 'Почта',
+	password: 'Пароль',
+	confirmPassword: 'Повторите пароль',
+};
 
 const sendFormData = (formData) => {
 	console.log(formData);
@@ -13,8 +20,9 @@ export const App = () => {
 	const {
 		register,
 		handleSubmit,
+		trigger,
 		reset,
-		formState: { errors, isDirty, isValid },
+		formState: { errors, touchedFields, isDirty, isValid },
 	} = useForm({
 		defaultValues: {
 			email: '',
@@ -22,12 +30,12 @@ export const App = () => {
 			confirmPassword: '',
 		},
 		resolver: yupResolver(schema),
-		mode: 'onChange',
-		reValidateMode: 'onBlur',
+		mode: 'onTouched',
+		reValidateMode: 'onChange',
 	});
 
-	const onSubmit = (formData) => {
-		sendFormData(formData);
+	const onSubmit = ({ email, password }) => {
+		sendFormData({ email, password });
 		reset();
 	};
 
@@ -46,41 +54,32 @@ export const App = () => {
 			<h1>Регистрация</h1>
 			<div className={styles.app}>
 				<form onSubmit={handleSubmit(onSubmit)}>
-					<label htmlFor="email">Почта</label>
-					<input
+					<Field
+						label={FIELD_LABELS.email}
 						{...register('email')}
 						id="email"
-						name="email"
 						type="email"
 						placeholder="Почта"
+						error={errors.email?.message}
 					/>
-					{errors.email?.message && (
-						<div className={styles.error}>{errors.email?.message}</div>
-					)}
-					<label htmlFor="password">Пароль</label>
-					<input
-						{...register('password')}
+					<Field
+						label={FIELD_LABELS.password}
+						{...register('password', {
+							onChange: () => touchedFields.confirmPassword && trigger('confirmPassword'),
+						})}
 						id="password"
-						name="password"
 						type="password"
 						placeholder="Пароль"
+						error={errors.password?.message}
 					/>
-					{errors.password?.message && (
-						<div className={styles.error}>{errors.password?.message}</div>
-					)}
-					<label htmlFor="confirmPassword">Повторите пароль</label>
-					<input
+					<Field
+						label={FIELD_LABELS.confirmPassword}
 						{...register('confirmPassword')}
 						id="confirmPassword"
-						name="confirmPassword"
 						type="password"
 						placeholder="Пароль"
+						error={errors.confirmPassword?.message}
 					/>
-					{errors.confirmPassword?.message && (
-						<div className={styles.error}>
-							{errors.confirmPassword?.message}
-						</div>
-					)}
 					<button type="submit" ref={submitBtnRef} disabled={!isFormValid}>
 						Зарегистрироваться
 					</button>
