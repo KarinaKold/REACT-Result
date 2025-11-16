@@ -5,6 +5,15 @@ import {
 	useRequestDelete,
 } from './hooks';
 import styles from './App.module.css';
+import { Loader } from './components/Loader/Loader';
+import { TodoList } from './components/TodoList/TodoList';
+import { Button } from './components/Button/Button';
+
+const ACTIONS = {
+	add: 'Добавить',
+	update: 'Обновить',
+	delete: 'Удалить',
+};
 
 export const App = () => {
 	const { todos, setTodos, isLoading } = useRequestGet();
@@ -15,24 +24,22 @@ export const App = () => {
 	return (
 		<div className={styles.app}>
 			<h1>TODO LIST</h1>
-			<button disabled={isCreating} onClick={requestAdd}>
-				Добавить
-			</button>
-			<button disabled={isUpdating} onClick={requestUpdate}>
-				Обновить
-			</button>
-			<button disabled={isDeleting} onClick={requestDelete}>
-				Удалить
-			</button>
-			{isLoading ? (
-				<div className="loader"></div>
-			) : (
-				todos.map(({ id, title, completed }) => (
-					<div key={id} className={styles.todoItem}>
-						<div className={completed ? styles.completed : ''}>{title}</div>
-					</div>
-				))
-			)}
+			<Button
+				action={isCreating}
+				handleClick={requestAdd}
+				clickName={ACTIONS.add}
+			/>
+			<Button
+				action={isUpdating}
+				handleClick={requestUpdate}
+				clickName={ACTIONS.update}
+			/>
+			<Button
+				action={isDeleting}
+				handleClick={requestDelete}
+				clickName={ACTIONS.delete}
+			/>
+			{isLoading ? <Loader /> : <TodoList todos={todos} />}
 		</div>
 	);
 };
