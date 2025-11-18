@@ -2,15 +2,16 @@ import { useState } from 'react';
 
 export const useRequestUpdate = (setTodos) => {
 	const [isUpdating, setIsUpdating] = useState(false);
-	const requestUpdate = () => {
+
+	const requestUpdate = (id, title, completed) => {
 		setIsUpdating(true);
 
-		fetch('http://localhost:3000/tasks/4', {
+		fetch(`http://localhost:3000/tasks/${id}`, {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json;charset=utf-8' },
 			body: JSON.stringify({
-				title: 'Убраться дома',
-				completed: true,
+				title,
+				completed,
 			}),
 		})
 			.then((rawResponse) => rawResponse.json())
@@ -22,5 +23,5 @@ export const useRequestUpdate = (setTodos) => {
 			.finally(() => setIsUpdating(false));
 	};
 
-	return { requestUpdate, isUpdating };
+	return { requestUpdate, isUpdating, setIsUpdating };
 };
