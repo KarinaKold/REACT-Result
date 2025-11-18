@@ -16,11 +16,15 @@ export const App = () => {
 	const { requestAdd, isCreating } = useRequestAdd(setTodos);
 	const [newTodo, setNewTodo] = useState('');
 	const [searchItem, setSearchItem] = useState('');
-	// const [isSorted, setIsSorted] = useState(false);
+	const [isSorted, setIsSorted] = useState(false);
 
 	const filteredTodos = todos.filter((todo) =>
 		todo.title.toLowerCase().includes(searchItem.toLowerCase()),
 	);
+
+	const sortedTodos = isSorted
+		? [...filteredTodos].sort((a, b) => a.title.localeCompare(b.title))
+		: filteredTodos;
 
 	const handleAddTodo = (e) => {
 		e.preventDefault();
@@ -48,7 +52,16 @@ export const App = () => {
 				/>
 				<Button type="submit" action={isCreating} clickName={ACTIONS.add} />
 			</form>
-			{isLoading ? <Loader /> : <TodoList todos={filteredTodos} setTodos={setTodos} />}
+			<Button
+				action={isSorted}
+				handleClick={() => setIsSorted(!isSorted)}
+				clickName={isSorted ? 'Сбросить сортировку' : 'Сортировать по алфавиту'}
+			/>
+			{isLoading ? (
+				<Loader />
+			) : (
+				<TodoList todos={sortedTodos} setTodos={setTodos} />
+			)}
 		</div>
 	);
 };
