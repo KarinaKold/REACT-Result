@@ -1,8 +1,4 @@
-import {
-	useRequestGet,
-	useRequestAdd,
-	// useRequestUpdate,
-} from './hooks';
+import { useRequestGet, useRequestAdd, useDebounce } from './hooks';
 import styles from './App.module.css';
 import { Loader } from './components/Loader/Loader';
 import { TodoList } from './components/TodoList/TodoList';
@@ -18,8 +14,10 @@ export const App = () => {
 	const [searchItem, setSearchItem] = useState('');
 	const [isSorted, setIsSorted] = useState(false);
 
+	const debouncedSearch = useDebounce(searchItem, 500);
+
 	const filteredTodos = todos.filter((todo) =>
-		todo.title.toLowerCase().includes(searchItem.toLowerCase()),
+		todo.title.toLowerCase().includes(debouncedSearch.toLowerCase()),
 	);
 
 	const sortedTodos = isSorted
