@@ -1,19 +1,19 @@
 {
-  "tasks": [
-    {
-      "title": "Купить продукты",
-      "completed": false,
-      "id": 1
-    },
-    {
-      "title": "Записаться к врачу",
-      "completed": true,
-      "id": 2
-    },
-    {
-      "title": "Заказать билеты",
-      "completed": false,
-      "id": 3
-    }
-  ]
+	"tasks": [
+		{
+			"title": "Купить продукты",
+			"completed": false,
+			"id": 1
+		},
+		{
+			"title": "Записаться к врачу",
+			"completed": true,
+			"id": 2
+		},
+		{
+			"title": "Заказать билеты",
+			"completed": false,
+			"id": 3
+		}
+	]
 }

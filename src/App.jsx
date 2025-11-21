@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRequestGet, useDebounce } from './hooks';
 import styles from './App.module.css';
 import { Loader } from './components/Loader/Loader';
+import { EmptyMessage } from './components/EmptyMessage/EmptyMessage';
 import { TodoList } from './components/TodoList/TodoList';
 import { Button } from './components/Button/Button';
 import { AddTodoForm } from './components/AddTodoForm/AddTodoForm';
@@ -40,6 +41,8 @@ export const App = () => {
 			/>
 			{isLoading ? (
 				<Loader />
+			) : sortedTodos.length === 0 ? (
+				<EmptyMessage />
 			) : (
 				<TodoList todos={sortedTodos} setTodos={setTodos} />
 			)}
