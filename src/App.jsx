@@ -1,16 +1,15 @@
-import { useRequestGet, useRequestAdd, useDebounce } from './hooks';
+import { useState } from 'react';
+import { useRequestGet, useDebounce } from './hooks';
 import styles from './App.module.css';
 import { Loader } from './components/Loader/Loader';
 import { TodoList } from './components/TodoList/TodoList';
 import { Button } from './components/Button/Button';
+import { AddTodoForm } from './components/AddTodoForm/AddTodoForm';
+import { Input } from './components/Input/Input';
 import { ACTIONS } from './constants';
-import { useState } from 'react';
-import { Search } from './components/Search/Search';
 
 export const App = () => {
 	const { todos, setTodos, isLoading } = useRequestGet();
-	const { requestAdd, isCreating } = useRequestAdd(setTodos);
-	const [newTodo, setNewTodo] = useState('');
 	const [searchItem, setSearchItem] = useState('');
 	const [isSorted, setIsSorted] = useState(false);
 
@@ -24,36 +23,20 @@ export const App = () => {
 		? [...filteredTodos].sort((a, b) => a.title.localeCompare(b.title))
 		: filteredTodos;
 
-	const handleAddTodo = (e) => {
-		e.preventDefault();
-		if (newTodo.trim()) {
-			requestAdd(newTodo);
-			setNewTodo('');
-		}
-	};
-
 	return (
 		<div className={styles.app}>
 			<h1>TODO LIST</h1>
-			<Search
+			<Input
 				type="text"
 				placeholder="Поиск..."
 				value={searchItem}
 				onChange={(e) => setSearchItem(e.target.value)}
 			/>
-			<form onSubmit={handleAddTodo}>
-				<input
-					type="text"
-					placeholder="Новая задача..."
-					value={newTodo}
-					onChange={(e) => setNewTodo(e.target.value)}
-				/>
-				<Button type="submit" action={isCreating} clickName={ACTIONS.add} />
-			</form>
+			<AddTodoForm setTodos={setTodos} />
 			<Button
 				action={isSorted}
 				handleClick={() => setIsSorted(!isSorted)}
-				clickName={isSorted ? 'Сбросить сортировку' : 'Сортировать по алфавиту'}
+				clickName={isSorted ? ACTIONS.unsort : ACTIONS.sort}
 			/>
 			{isLoading ? (
 				<Loader />

@@ -3,6 +3,7 @@ import { useRequestUpdate, useRequestDelete } from '../../hooks';
 import styles from './TodoList.module.css';
 import { ACTIONS } from '../../constants';
 import { useState } from 'react';
+import { Input } from '../Input/Input';
 
 export const TodoList = ({ todos, setTodos }) => {
 	const { requestUpdate, isUpdating, setIsUpdating } = useRequestUpdate(setTodos);
@@ -20,7 +21,7 @@ export const TodoList = ({ todos, setTodos }) => {
 	};
 
 	const handleSave = (todo) => {
-		if (editingTodo) {
+		if (editingTodo && title.length > 0) {
 			const updatedTodo = {
 				id: editingTodo,
 				title,
@@ -44,7 +45,7 @@ export const TodoList = ({ todos, setTodos }) => {
 				<div key={todo.id}>
 					{editingTodo && editingTodo.id === todo.id ? (
 						<>
-							<input
+							<Input
 								type="text"
 								value={title}
 								onChange={(e) => setTitle(e.target.value)}
@@ -58,16 +59,25 @@ export const TodoList = ({ todos, setTodos }) => {
 					) : (
 						<>
 							<div className={styles.todoItem}>
+								<input
+									type="checkbox"
+									id={`checkbox-${todo.id}`}
+									checked={todo.completed}
+									onChange={() => handleToggleComplete(todo)}
+								/>
+								<label
+									htmlFor={`checkbox-${todo.id}`}
+									className={styles.customCheckbox}
+								></label>
 								<div className={todo.completed ? styles.completed : ''}>
 									{todo.title}
 								</div>
-								<button onClick={() => handleToggleComplete(todo)}>
-									{todo.completed ? 'завершено' : 'Отметить'}
-								</button>
 							</div>
-							<button onClick={() => handleEditClick(todo)}>
-								Изменить
-							</button>
+							<Button
+								action={isUpdating}
+								handleClick={() => handleEditClick(todo)}
+								clickName={ACTIONS.update}
+							/>
 						</>
 					)}
 					<Button

@@ -1,34 +1,19 @@
 {
-	"tasks": [
-		{
-			"id": 1,
-			"title": "Купить продукты",
-			"completed": false
-		},
-		{
-			"title": "Позвонить врачу",
-			"completed": true,
-			"id": 2
-		},
-		{
-			"title": "Заказать билеты",
-			"completed": true,
-			"id": 3
-		},
-		{
-			"title": "1",
-			"completed": false,
-			"id": 4
-		},
-		{
-			"title": "2",
-			"completed": false,
-			"id": 5
-		},
-		{
-			"title": "3",
-			"completed": false,
-			"id": 6
-		}
-	]
+  "tasks": [
+    {
+      "title": "Купить продукты",
+      "completed": false,
+      "id": 1
+    },
+    {
+      "title": "Записаться к врачу",
+      "completed": true,
+      "id": 2
+    },
+    {
+      "title": "Заказать билеты",
+      "completed": false,
+      "id": 3
+    }
+  ]
 }

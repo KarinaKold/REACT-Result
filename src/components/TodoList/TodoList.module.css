@@ -1,13 +1,51 @@
 .todoItem {
+	font-size: 1.1em;
+	font-weight: 500;
+	display: flex;
 	border: 1px solid #4a4a4a;
 	margin-bottom: 10px;
 	padding: 10px;
-	border-radius: 4px;
-	color: rgb(255, 230, 0);
+	border-radius: 8px;
+	color: #bb86fc;
 }
 
 .completed {
 	text-decoration: line-through;
 	color: white;
 	opacity: 0.5;
+}
+
+.todoItem input[type='checkbox'] {
+	display: none;
+}
+
+.todoItem .customCheckbox {
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	border: 2px solid #bb86fc;
+	display: inline-block;
+	position: relative;
+	margin-right: 15px;
+	cursor: pointer;
+}
+
+.todoItem .customCheckbox:hover {
+	background-color: #bb86fc;
+}
+
+.todoItem input[type='checkbox']:checked + .customCheckbox {
+	background-color: #bb86fc;
+}
+
+.todoItem input[type='checkbox']:checked + .customCheckbox::after {
+	content: '';
+	position: absolute;
+	left: 8px;
+	top: 6px;
+	width: 6px;
+	height: 12px;
+	border: solid white;
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
 }

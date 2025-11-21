@@ -1,7 +1,8 @@
-button {
+.button {
+	margin: 0 10px 10px 10px;
 	border-radius: 8px;
-	border: 1px solid transparent;
-	padding: 0.6em 1.2em;
+	border: 1px solid #1a1a1a;
+	padding: 10px;
 	font-size: 1em;
 	font-weight: 500;
 	font-family: inherit;
@@ -9,10 +10,13 @@ button {
 	cursor: pointer;
 	transition: border-color 0.25s;
 }
-button:hover {
-	border-color: #646cff;
+
+.button:hover {
+	border: 1px solid #646cff;
 }
-button:focus,
-button:focus-visible {
-	outline: 4px auto -webkit-focus-ring-color;
+
+.button:focus,
+.button:focus-visible {
+	outline: 1px auto -webkit-focus-ring-color;
+	background-color: #646cff;
 }
