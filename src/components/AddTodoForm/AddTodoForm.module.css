@@ -1,0 +1,8 @@
+.addForm {
+	width: 400px;
+	display: flex;
+}
+
+.addForm input {
+	flex-grow: 1;
+}

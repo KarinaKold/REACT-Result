@@ -53,7 +53,7 @@ export const TodoList = ({ todos, setTodos }) => {
 							<Button
 								action={isUpdating}
 								handleClick={() => handleSave(todo)}
-								clickName="Сохранить"
+								clickName={ACTIONS.save}
 							/>
 						</>
 					) : (

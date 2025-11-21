@@ -18,7 +18,7 @@ export const AddTodoForm = ({ setTodos }) => {
 	};
 
 	return (
-		<form onSubmit={handleAddTodo}>
+		<form className={styles.addForm} onSubmit={handleAddTodo}>
 			<Input
 				type="text"
 				placeholder="Новая задача..."
