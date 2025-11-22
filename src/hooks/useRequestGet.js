@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
+import { ref, onValue } from 'firebase/database';
+import { db } from '../firebase';
 
 export const useRequestGet = () => {
-	const [todos, setTodos] = useState([]);
-	const [isLoading, setIsLoading] = useState(false);
+	const [todos, setTodos] = useState({});
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		setIsLoading(true);
+		const dbRef = ref(db, 'tasks');
 
-		fetch('http://localhost:3000/tasks')
-			.then((loadedData) => loadedData.json())
-			.then((loadedTodos) => {
-				setTodos(loadedTodos);
-			})
-			.finally(() => setIsLoading(false));
+		return onValue(dbRef, (snapshot) => {
+			const loadedData = snapshot.val() || {};
+
+			setTodos(loadedData);
+			setIsLoading(false);
+		});
 	}, []);
 
-	return { todos, setTodos, isLoading };
+	return { todos, isLoading };
 };

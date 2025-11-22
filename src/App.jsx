@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useRequestGet, useDebounce } from './hooks';
 import styles from './App.module.css';
+import { useRequestGet, useDebounce } from './hooks';
 import { Loader } from './components/Loader/Loader';
 import { EmptyMessage } from './components/EmptyMessage/EmptyMessage';
 import { TodoList } from './components/TodoList/TodoList';
@@ -10,13 +10,13 @@ import { Input } from './components/Input/Input';
 import { ACTIONS } from './constants';
 
 export const App = () => {
-	const { todos, setTodos, isLoading } = useRequestGet();
+	const { todos, isLoading } = useRequestGet();
 	const [searchItem, setSearchItem] = useState('');
 	const [isSorted, setIsSorted] = useState(false);
 
 	const debouncedSearch = useDebounce(searchItem, 500);
 
-	const filteredTodos = todos.filter((todo) =>
+	const filteredTodos = Object.values(todos).filter((todo) =>
 		todo.title.toLowerCase().includes(debouncedSearch.toLowerCase()),
 	);
 
@@ -33,7 +33,7 @@ export const App = () => {
 				value={searchItem}
 				onChange={(e) => setSearchItem(e.target.value)}
 			/>
-			<AddTodoForm setTodos={setTodos} />
+			<AddTodoForm />
 			<Button
 				action={isSorted}
 				handleClick={() => setIsSorted(!isSorted)}
@@ -44,7 +44,7 @@ export const App = () => {
 			) : sortedTodos.length === 0 ? (
 				<EmptyMessage />
 			) : (
-				<TodoList todos={sortedTodos} setTodos={setTodos} />
+				<TodoList todos={sortedTodos} />
 			)}
 		</div>
 	);

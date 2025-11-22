@@ -5,8 +5,8 @@ import { Input } from '../Input/Input';
 import { Button } from '../Button/Button';
 import { ACTIONS } from '../../constants';
 
-export const AddTodoForm = ({ setTodos }) => {
-	const { requestAdd, isCreating } = useRequestAdd(setTodos);
+export const AddTodoForm = () => {
+	const { requestAdd, isCreating } = useRequestAdd();
 	const [newTodo, setNewTodo] = useState('');
 
 	const handleAddTodo = (e) => {

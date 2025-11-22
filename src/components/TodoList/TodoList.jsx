@@ -5,27 +5,27 @@ import { ACTIONS } from '../../constants';
 import { useState } from 'react';
 import { Input } from '../Input/Input';
 
-export const TodoList = ({ todos, setTodos }) => {
-	const { requestUpdate, isUpdating, setIsUpdating } = useRequestUpdate(setTodos);
-	const { requestDelete, isDeleting } = useRequestDelete(setTodos);
+export const TodoList = ({ todos }) => {
+	const { requestUpdate, isUpdating, setIsUpdating } = useRequestUpdate();
+	const { requestDelete, isDeleting } = useRequestDelete();
 
 	const [editingTodo, setEditingTodo] = useState(null); // текущее редактируемое дело
 	const [title, setTitle] = useState('');
 
-	const handleToggleComplete = (todo) => {
+	const handleToggleComplete = (id, completed) => {
 		const updatedTodo = {
-			...todo,
-			completed: !todo.completed,
+			...todos[id],
+			completed: !completed,
 		};
-		requestUpdate(todo.id, updatedTodo.title, updatedTodo.completed);
+		requestUpdate(id, updatedTodo.title, updatedTodo.completed);
 	};
 
-	const handleSave = (todo) => {
+	const handleSave = (id, title, completed) => {
 		if (editingTodo && title.length > 0) {
 			const updatedTodo = {
 				id: editingTodo,
 				title,
-				completed: todo.completed,
+				completed: completed,
 			};
 			requestUpdate(editingTodo.id, title, updatedTodo.completed);
 			setEditingTodo(null);
@@ -33,17 +33,17 @@ export const TodoList = ({ todos, setTodos }) => {
 		}
 	};
 
-	const handleEditClick = (todo) => {
-		setEditingTodo(todo);
-		setTitle(todo.title);
+	const handleEditClick = (id, title, completed) => {
+		setEditingTodo({ id, title, completed });
+		setTitle(title);
 		setIsUpdating(true);
 	};
 
 	return (
 		<div>
-			{todos.map((todo) => (
-				<div key={todo.id}>
-					{editingTodo && editingTodo.id === todo.id ? (
+			{Object.entries(todos).map(([id, { title, completed }]) => (
+				<div key={id}>
+					{editingTodo && editingTodo.id === id ? (
 						<>
 							<Input
 								type="text"
@@ -52,7 +52,7 @@ export const TodoList = ({ todos, setTodos }) => {
 							/>
 							<Button
 								action={isUpdating}
-								handleClick={() => handleSave(todo)}
+								handleClick={() => handleSave(id, title, completed)}
 								clickName={ACTIONS.save}
 							/>
 						</>
@@ -61,28 +61,28 @@ export const TodoList = ({ todos, setTodos }) => {
 							<div className={styles.todoItem}>
 								<input
 									type="checkbox"
-									id={`checkbox-${todo.id}`}
-									checked={todo.completed}
-									onChange={() => handleToggleComplete(todo)}
+									id={`checkbox-${id}`}
+									checked={completed}
+									onChange={() => handleToggleComplete(id, title, completed)}
 								/>
 								<label
-									htmlFor={`checkbox-${todo.id}`}
+									htmlFor={`checkbox-${id}`}
 									className={styles.customCheckbox}
 								></label>
-								<div className={todo.completed ? styles.completed : ''}>
-									{todo.title}
+								<div className={completed ? styles.completed : ''}>
+									{title}
 								</div>
 							</div>
 							<Button
 								action={isUpdating}
-								handleClick={() => handleEditClick(todo)}
+								handleClick={() => handleEditClick(id, title, completed)}
 								clickName={ACTIONS.update}
 							/>
 						</>
 					)}
 					<Button
 						action={isDeleting}
-						handleClick={() => requestDelete(todo.id)}
+						handleClick={() => requestDelete(id)}
 						clickName={ACTIONS.delete}
 					/>
 				</div>

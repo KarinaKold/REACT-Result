@@ -1,19 +1,16 @@
 {
-	"tasks": [
-		{
+	"tasks": {
+		"1": {
 			"title": "Купить продукты",
-			"completed": false,
-			"id": 1
+			"completed": false
 		},
-		{
+		"2": {
 			"title": "Записаться к врачу",
-			"completed": true,
-			"id": 2
+			"completed": true
 		},
-		{
+		"3": {
 			"title": "Заказать билеты",
-			"completed": false,
-			"id": 3
+			"completed": false
 		}
-	]
+	}
 }

@@ -1,26 +1,19 @@
 import { useState } from 'react';
+import { ref, set } from 'firebase/database';
+import { db } from '../firebase';
 
-export const useRequestUpdate = (setTodos) => {
+export const useRequestUpdate = () => {
 	const [isUpdating, setIsUpdating] = useState(false);
 
 	const requestUpdate = (id, title, completed) => {
 		setIsUpdating(true);
 
-		fetch(`http://localhost:3000/tasks/${id}`, {
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
-			body: JSON.stringify({
-				title,
-				completed,
-			}),
-		})
-			.then((rawResponse) => rawResponse.json())
-			.then((updatedTodo) => {
-				setTodos((prev) =>
-					prev.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo)),
-				);
-			})
-			.finally(() => setIsUpdating(false));
+		const dbRef = ref(db, `tasks/${id}`);
+
+		set(dbRef, {
+			title,
+			completed,
+		}).finally(() => setIsUpdating(false));
 	};
 
 	return { requestUpdate, isUpdating, setIsUpdating };
