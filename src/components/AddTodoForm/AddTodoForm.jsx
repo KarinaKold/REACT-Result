@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import styles from './AddTodoForm.module.css';
-import { useRequestAdd } from '../../hooks';
 import { Input } from '../Input/Input';
 import { Button } from '../Button/Button';
 import { ACTIONS } from '../../constants';
 
-export const AddTodoForm = ({ setTodos }) => {
-	const { requestAdd, isCreating } = useRequestAdd(setTodos);
+export const AddTodoForm = ({ createData }) => {
 	const [newTodo, setNewTodo] = useState('');
 
-	const handleAddTodo = (e) => {
-		e.preventDefault();
+	const handleAddTodo = (event) => {
+		event.preventDefault();
 		if (newTodo.trim()) {
-			requestAdd(newTodo);
+			createData({
+				title: newTodo,
+				completed: false,
+			});
 			setNewTodo('');
 		}
 	};
@@ -25,12 +26,7 @@ export const AddTodoForm = ({ setTodos }) => {
 				value={newTodo}
 				onChange={(e) => setNewTodo(e.target.value)}
 			/>
-			<Button
-				className={styles.add}
-				type="submit"
-				action={isCreating}
-				clickName={ACTIONS.add}
-			/>
+			<Button className={styles.add} type="submit" clickName={ACTIONS.add} />
 		</form>
 	);
 };
