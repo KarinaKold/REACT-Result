@@ -25,6 +25,11 @@ h1 {
 	line-height: 1.1;
 }
 
+title {
+	font-size: 3em;
+	line-height: 1.1;
+}
+
 @media (prefers-color-scheme: light) {
 	:root {
 		color: #213547;

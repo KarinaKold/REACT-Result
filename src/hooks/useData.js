@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 const URL = 'http://localhost:3000/todos';
-// &q=${searchValue}
 
 export const useData = (order, searchValue) => {
 	const [data, setData] = useState([]);
