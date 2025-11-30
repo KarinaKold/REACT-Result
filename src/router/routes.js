@@ -7,10 +7,6 @@ export const router = createBrowserRouter([
 	{
 		path: '/',
 		Component: App,
-		// children: [
-		// { index: true, Component: App },
-		// 	{ path: 'todo/:id', Component: TodoPage },
-		// ],
 	},
 	{ path: 'task/:id', Component: TodoPage },
 	{
