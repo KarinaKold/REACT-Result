@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useData } from '../../hooks';
 import styles from './TodoPage.module.css';
@@ -6,14 +6,62 @@ import { ACTIONS } from '../../constants';
 import { Button } from '../Button/Button';
 import { Input } from '../Input/Input';
 
+const URL = 'http://localhost:3000/todos';
+
+const useDataId = (id) => {
+  const [data, setData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${URL}/${id}`);
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setData(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
+
+  return {
+    data,
+	setData,
+    isLoading,
+    error,
+  };
+};
+
+
 export const TodoPage = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const { data, deleteData, updateData } = useData();
-	const { title, completed } = data;
+	const {data, setData} = useDataId(id);
+	const {title, completed} = data;
+	const { deleteData, updateData } = useData();
 	const [isUpdate, setIsUpdate] = useState(false);
 	const [isDelete, setIsDelete] = useState(false);
-	const [updateValue, setUpdateValue] = useState(title);
+	const [updateValue, setUpdateValue] = useState('');
+	console.log(data)
+
+	useEffect(() => {
+    if (data && title) {
+      setUpdateValue(title)
+    }
+  }, [data, title]);
+
 
 	const onDelete = async (id) => {
 		setIsDelete(true);
@@ -27,7 +75,8 @@ export const TodoPage = () => {
 	};
 
 	const onUpdate = async (id, payload) => {
-		await updateData(id, payload);
+		const updatedData = await updateData(id, payload);
+		setData((prev) => ({ ...prev, ...updatedData }));
 		setIsUpdate(false);
 	};
 
