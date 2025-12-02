@@ -3,6 +3,7 @@ import { useData, useDebounce } from './hooks';
 import styles from './App.module.css';
 import { TodoList, AddTodoForm, Input, Button, Loader, EmptyMessage } from './components';
 import { ACTIONS } from './constants';
+import { AppContext } from './context';
 
 export const App = () => {
 	const [order, setOrder] = useState('id&_order=asc');
@@ -32,24 +33,26 @@ export const App = () => {
 	return (
 		<div className={styles.app}>
 			<h1>TODO LIST</h1>
-			<Input
-				type="text"
-				placeholder="Поиск..."
-				value={searchItem}
-				onChange={handleSearch}
-			/>
-			<AddTodoForm createData={createData} />
-			<Button
-				handleClick={handleOrder}
-				clickName={isSorted ? ACTIONS.unsort : ACTIONS.sort}
-			/>
-			{isLoading ? (
-				<Loader />
-			) : data.length === 0 ? (
-				<EmptyMessage />
-			) : (
-				<TodoList data={data} updateData={updateData} deleteData={deleteData} />
-			)}
+			<AppContext value={{ data, deleteData, createData, updateData }}>
+				<Input
+					type="text"
+					placeholder="Поиск..."
+					value={searchItem}
+					onChange={handleSearch}
+				/>
+				<AddTodoForm />
+				<Button
+					handleClick={handleOrder}
+					clickName={isSorted ? ACTIONS.unsort : ACTIONS.sort}
+				/>
+				{isLoading ? (
+					<Loader />
+				) : data.length === 0 ? (
+					<EmptyMessage />
+				) : (
+					<TodoList />
+				)}
+			</AppContext>
 		</div>
 	);
 };

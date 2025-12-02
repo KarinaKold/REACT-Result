@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { use, useState } from 'react';
 import styles from './AddTodoForm.module.css';
 import { Input } from '../Input/Input';
 import { Button } from '../Button/Button';
 import { ACTIONS } from '../../constants';
+import { AppContext } from '../../context';
 
-export const AddTodoForm = ({ createData }) => {
+export const AddTodoForm = () => {
+	const { createData } = use(AppContext);
 	const [newTodo, setNewTodo] = useState('');
 
 	const handleAddTodo = (event) => {

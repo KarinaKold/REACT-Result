@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { use, useState } from 'react';
 import styles from './TodoItem.module.css';
 import { ACTIONS } from '../../constants';
 import { Button } from '../Button/Button';
 import { Input } from '../Input/Input';
+import { AppContext } from '../../context';
 
-export const TodoItem = ({ id, title, completed, updateData, deleteData }) => {
+export const TodoItem = ({ id, title, completed }) => {
+	const { updateData, deleteData } = use(AppContext);
+
 	const [isUpdate, setIsUpdate] = useState(false);
 	const [isDelete, setIsDelete] = useState(false);
 	const [updateValue, setUpdateValue] = useState(title);

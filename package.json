@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "format": "prettier --write ./src"
+    "format": "prettier --write ./src",
+	"start:json": "npx json-server@0.17.4 --watch src/db.json"
   },
   "dependencies": {
     "react": "^19.1.1",
