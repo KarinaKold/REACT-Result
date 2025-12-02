@@ -4,3 +4,4 @@ export * from './EmptyMessage/EmptyMessage';
 export * from './Input/Input';
 export * from './Loader/Loader';
 export * from './TodoList/TodoList';
+export * from './ErrorBoundary/ErrorBoundary';
