@@ -6,5 +6,5 @@ export const InformationLayout = ({ status }) => {
 };
 
 InformationLayout.propTypes = {
-	status: PropTypes.string
-}
+	status: PropTypes.string,
+};

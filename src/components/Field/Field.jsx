@@ -7,5 +7,5 @@ export const Field = ({ field, onClickCell }) => {
 
 Field.propTypes = {
 	field: PropTypes.array,
-	onClickCell: PropTypes.func
-}
+	onClickCell: PropTypes.func,
+};

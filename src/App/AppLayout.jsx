@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { Field } from '../Field/Field';
-import { Information } from '../Information/Information';
+import { Field } from '../components/Field/Field';
+import { Information } from '../components/Information/Information';
 import styles from './app.module.css';
 
 export const AppLayout = ({
@@ -30,5 +30,5 @@ AppLayout.propTypes = {
 	isGameEnded: PropTypes.bool,
 	currentPlayer: PropTypes.string,
 	onClickCell: PropTypes.func,
-	restart: PropTypes.func
-}
+	restart: PropTypes.func,
+};

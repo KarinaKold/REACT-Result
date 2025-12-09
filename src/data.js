@@ -1,5 +1,4 @@
-export const emptyField = ['', '', '', '', '', '', '', '', ''];
-//Array(9).fill('')
+export const emptyField = Array(9).fill('');
 
 export const WIN_PATTERNS = [
 	[0, 1, 2],
@@ -11,3 +10,9 @@ export const WIN_PATTERNS = [
 	[0, 4, 8],
 	[2, 4, 6], // Варианты побед по диагонали
 ];
+
+export const STATUS = {
+	WIN: 'Победа',
+	DRAW: 'Ничья',
+	TURN: 'Ходит',
+};

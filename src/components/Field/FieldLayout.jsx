@@ -21,5 +21,5 @@ export const FieldLayout = ({ field, onClickCell }) => {
 
 FieldLayout.propTypes = {
 	field: PropTypes.array,
-	onClickCell: PropTypes.func
-}
+	onClickCell: PropTypes.func,
+};
