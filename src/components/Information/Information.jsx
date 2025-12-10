@@ -1,8 +1,11 @@
 import PropTypes from 'prop-types';
 import { InformationLayout } from './InformationLayout';
 import { STATUS } from '../../data';
+import { store } from '../../store';
 
-export const Information = ({ isDraw, isGameEnded, currentPlayer }) => {
+export const Information = () => {
+	const { currentPlayer, isDraw, isGameEnded } = store.getState();
+
 	let status;
 
 	if (isDraw) {

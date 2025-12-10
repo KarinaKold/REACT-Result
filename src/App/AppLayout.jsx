@@ -3,22 +3,11 @@ import { Field } from '../components/Field/Field';
 import { Information } from '../components/Information/Information';
 import styles from './app.module.css';
 
-export const AppLayout = ({
-	field,
-	isDraw,
-	isGameEnded,
-	currentPlayer,
-	onClickCell,
-	restart,
-}) => {
+export const AppLayout = ({ restart, onClickCell }) => {
 	return (
 		<div className={styles.app}>
-			<Information
-				isDraw={isDraw}
-				isGameEnded={isGameEnded}
-				currentPlayer={currentPlayer}
-			/>
-			<Field field={field} onClickCell={onClickCell} />
+			<Information />
+			<Field onClickCell={onClickCell} />
 			<button onClick={restart}>Начать заново</button>
 		</div>
 	);
