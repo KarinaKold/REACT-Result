@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { InformationLayout } from './InformationLayout';
 import { STATUS } from '../../data';
 import { store } from '../../store';
@@ -17,10 +16,4 @@ export const Information = () => {
 	}
 
 	return <InformationLayout status={status} />;
-};
-
-Information.propTypes = {
-	isDraw: PropTypes.bool,
-	isGameEnded: PropTypes.bool,
-	currentPlayer: PropTypes.string,
 };
