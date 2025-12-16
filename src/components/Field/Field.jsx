@@ -1,25 +1,27 @@
+import { useSelector, useDispatch } from 'react-redux';
 import { FieldLayout } from './FieldLayout';
-import { store } from '../../store';
 import { checkWin } from '../../utils/check-win';
 
 export const Field = () => {
-	const { field } = store.getState();
+	const dispatch = useDispatch();
+	const field = useSelector((state) => state.field);
+	const currentPlayer = useSelector((state) => state.currentPlayer);
+	const isGameEnded = useSelector((state) => state.isGameEnded);
 
 	const onClickCell = (index) => {
-		const { currentPlayer, field, isGameEnded } = store.getState();
 		if (field[index] || isGameEnded) return;
 
 		const newField = [...field];
 		newField[index] = currentPlayer;
-		store.dispatch({ type: 'SET_FIELD', payload: newField });
+		dispatch({ type: 'SET_FIELD', payload: newField });
 
 		if (checkWin(newField, currentPlayer)) {
-			store.dispatch({ type: 'SET_GAME_END_STATUS', payload: true });
+			dispatch({ type: 'SET_GAME_END_STATUS', payload: true });
 		} else if (newField.every((cell) => cell)) {
-			store.dispatch({ type: 'SET_DRAW_STATUS', payload: true });
+			dispatch({ type: 'SET_DRAW_STATUS', payload: true });
 		} else {
 			const newCurrentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-			store.dispatch({ type: 'SET_CURRENT_PLAYER', payload: newCurrentPlayer });
+			dispatch({ type: 'SET_CURRENT_PLAYER', payload: newCurrentPlayer });
 		}
 	};
 
