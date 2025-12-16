@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { FieldLayout } from './FieldLayout';
 import { checkWin } from '../../utils/check-win';
 import { selectField, selectCurrentPlayer, selectGameEnd } from '../../selectors';
+import { setCurrentPlayer, setDrawStatus, setField, setGameEndStatus } from '../../actions';
 
 export const Field = () => {
 	const dispatch = useDispatch();
@@ -14,15 +15,15 @@ export const Field = () => {
 
 		const newField = [...field];
 		newField[index] = currentPlayer;
-		dispatch({ type: 'SET_FIELD', payload: newField });
+		dispatch(setField(newField));
 
 		if (checkWin(newField, currentPlayer)) {
-			dispatch({ type: 'SET_GAME_END_STATUS', payload: true });
+			dispatch(setGameEndStatus(true));
 		} else if (newField.every((cell) => cell)) {
-			dispatch({ type: 'SET_DRAW_STATUS', payload: true });
+			dispatch(setDrawStatus(true));
 		} else {
 			const newCurrentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-			dispatch({ type: 'SET_CURRENT_PLAYER', payload: newCurrentPlayer });
+			dispatch(setCurrentPlayer(newCurrentPlayer));
 		}
 	};
 
