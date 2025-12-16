@@ -1,12 +1,13 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { FieldLayout } from './FieldLayout';
 import { checkWin } from '../../utils/check-win';
+import { selectField, selectCurrentPlayer, selectGameEnd } from '../../selectors';
 
 export const Field = () => {
 	const dispatch = useDispatch();
-	const field = useSelector((state) => state.field);
-	const currentPlayer = useSelector((state) => state.currentPlayer);
-	const isGameEnded = useSelector((state) => state.isGameEnded);
+	const field = useSelector(selectField);
+	const currentPlayer = useSelector(selectCurrentPlayer);
+	const isGameEnded = useSelector(selectGameEnd);
 
 	const onClickCell = (index) => {
 		if (field[index] || isGameEnded) return;

@@ -1,11 +1,13 @@
 import { useSelector } from 'react-redux';
 import { InformationLayout } from './InformationLayout';
 import { STATUS } from '../../data';
+import { selectCurrentPlayer, selectDraw, selectGameEnd } from '../../selectors';
+
 
 export const Information = () => {
-	const currentPlayer = useSelector((state) => state.currentPlayer);
-	const isDraw = useSelector((state) => state.isDraw);
-	const isGameEnded = useSelector((state) => state.isGameEnded);
+	const currentPlayer = useSelector(selectCurrentPlayer);
+	const isDraw = useSelector(selectDraw);
+	const isGameEnded = useSelector(selectGameEnd);
 
 	let status;
 
