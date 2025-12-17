@@ -1,13 +1,17 @@
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useData, useDebounce } from './hooks';
 import styles from './App.module.css';
 import { TodoList, AddTodoForm, Input, Button, Loader, EmptyMessage } from './components';
-import { ACTIONS } from './constants';
+import { selectOrder, selectSearchItem, selectSortStatus } from './selectors';
+import { setSearchItem, setOrder, setSortStatus } from './actions';
+import { ACTIONS, ORDER } from './constants';
 
 export const App = () => {
-	const [order, setOrder] = useState('id&_order=asc');
-	const [searchItem, setSearchItem] = useState('');
-	const [isSorted, setIsSorted] = useState(false);
+	const dispatch = useDispatch();
+	const order = useSelector(selectOrder);
+	const searchItem = useSelector(selectSearchItem);
+	const isSorted = useSelector(selectSortStatus);
+
 	const debouncedSearch = useDebounce(searchItem, 1000);
 	const { data, isLoading, error, deleteData, createData, updateData } = useData(
 		order,
@@ -19,14 +23,13 @@ export const App = () => {
 	}
 
 	const handleSearch = ({ target }) => {
-		setSearchItem(target.value);
+		dispatch(setSearchItem(target.value));
 	};
 
 	const handleOrder = () => {
-		setOrder((prev) =>
-			prev === 'id&_order=asc' ? 'title&_order=asc' : 'id&_order=asc',
-		);
-		setIsSorted(!isSorted);
+		const newOrder = order === ORDER.id_asc ? ORDER.title_asc : ORDER.id_asc;
+		dispatch(setOrder(newOrder));
+		dispatch(setSortStatus(!isSorted));
 	};
 
 	return (
