@@ -1,1 +1,1 @@
-export const selectSortStatus = (state) => state.isSorted;
+export const selectSortStatus = (state) => state.app.isSorted;

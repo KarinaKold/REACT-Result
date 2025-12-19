@@ -1,13 +1,13 @@
-import { ORDER } from './constants';
+import { ORDER } from '../constants';
 
-const initialState = {
+export const initialAppState = {
 	order: ORDER.id_asc,
 	searchItem: '',
 	isSorted: false,
 	newTodo: '',
 };
 
-export const reducer = (state = initialState, { type, payload }) => {
+export const appReducer = (state = initialAppState, { type, payload }) => {
 	switch (type) {
 		case 'SET_SEARCH_ITEM':
 			return {
@@ -30,7 +30,7 @@ export const reducer = (state = initialState, { type, payload }) => {
 				newTodo: payload,
 			};
 		case 'RESTART_GAME':
-			return initialState;
+			return initialAppState;
 		default:
 			return state;
 	}

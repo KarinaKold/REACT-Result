@@ -1,17 +1,20 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styles from './TodoItem.module.css';
-import { ACTIONS } from '../../constants';
 import { Button } from '../Button/Button';
 import { Input } from '../Input/Input';
+import { ACTIONS } from '../../constants';
+import { deleteData, updateData } from '../../actions';
 
-export const TodoItem = ({ id, title, completed, updateData, deleteData }) => {
+export const TodoItem = ({ id, title, completed }) => {
+	const dispatch = useDispatch();
 	const [isUpdate, setIsUpdate] = useState(false);
 	const [isDelete, setIsDelete] = useState(false);
 	const [updateValue, setUpdateValue] = useState(title);
 
-	const onDelete = async (id) => {
+	const onDelete = (id) => {
 		setIsDelete(true);
-		await deleteData(id);
+		dispatch(deleteData(id));
 		setIsDelete(false);
 	};
 
@@ -19,8 +22,8 @@ export const TodoItem = ({ id, title, completed, updateData, deleteData }) => {
 		setIsUpdate((prev) => !prev);
 	};
 
-	const onUpdate = async (id, payload) => {
-		await updateData(id, payload);
+	const onUpdate = (id, payload) => {
+		dispatch(updateData(id, payload));
 		setIsUpdate(false);
 	};
 

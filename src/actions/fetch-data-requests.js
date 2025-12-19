@@ -1,30 +1,23 @@
-import { useEffect, useState } from 'react';
-
 const URL = 'http://localhost:3000/todos';
 
-export const useData = (order, searchValue) => {
-	const [data, setData] = useState([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState(null);
-
-	const fetchData = async () => {
-		setIsLoading(true);
+export const fetchData = (order, searchValue) => {
+	return async (dispatch) => {
+		dispatch({ type: 'FETCH_DATA_REQUEST' });
 		try {
 			const response = await fetch(URL + `?_sort=${order}&q=${searchValue}`);
-
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
 			}
 			const data = await response.json();
-			setData(data);
-			setIsLoading(false);
+			dispatch({ type: 'FETCH_DATA_SUCCESS', payload: data });
 		} catch (error) {
-			setError(error.message);
-			setIsLoading(false);
+			dispatch({ type: 'FETCH_DATA_FAILURE', payload: error.message });
 		}
 	};
+};
 
-	const deleteData = async (id) => {
+export const deleteData = (id) => {
+	return async (dispatch) => {
 		try {
 			const response = await fetch(URL + `/${id}`, {
 				method: 'DELETE',
@@ -35,15 +28,15 @@ export const useData = (order, searchValue) => {
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
 			}
-			setData((prev) => prev.filter((todo) => todo.id !== id));
+			dispatch({ type: 'DELETE_DATA', payload: id });
 		} catch (error) {
-			setError(error.message);
-			setIsLoading(false);
+			dispatch({ type: 'FETCH_DATA_FAILURE', payload: error.message });
 		}
 	};
+};
 
-	const createData = async (payload) => {
-		setIsLoading(true);
+export const createData = (payload) => {
+	return async (dispatch) => {
 		try {
 			const response = await fetch(URL, {
 				method: 'POST',
@@ -56,16 +49,15 @@ export const useData = (order, searchValue) => {
 				throw new Error('Network response was not ok');
 			}
 			const newTodo = await response.json();
-			setData(data.concat(newTodo));
-			setIsLoading(false);
+			dispatch({ type: 'CREATE_DATA', payload: newTodo });
 		} catch (error) {
-			setError(error.message);
-			setIsLoading(false);
+			dispatch({ type: 'FETCH_DATA_FAILURE', payload: error.message });
 		}
 	};
+};
 
-	const updateData = async (id, payload) => {
-		setIsLoading(true);
+export const updateData = (id, payload) => {
+	return async (dispatch) => {
 		try {
 			const response = await fetch(URL + `/${id}`, {
 				method: 'PATCH',
@@ -78,24 +70,10 @@ export const useData = (order, searchValue) => {
 				throw new Error('Network response was not ok');
 			}
 			const updateTodo = await response.json();
-			setData(data.map((todo) => (todo.id === id ? updateTodo : todo)));
-			setIsLoading(false);
+
+			dispatch({ type: 'UPDATE_DATA', payload: updateTodo });
 		} catch (error) {
-			setError(error.message);
-			setIsLoading(false);
+			dispatch({ type: 'FETCH_DATA_FAILURE', payload: error.message });
 		}
-	};
-
-	useEffect(() => {
-		fetchData();
-	}, [order, searchValue]);
-
-	return {
-		data,
-		isLoading,
-		error,
-		deleteData,
-		createData,
-		updateData,
 	};
 };

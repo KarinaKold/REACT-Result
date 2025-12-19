@@ -3,20 +3,22 @@ import styles from './AddTodoForm.module.css';
 import { Input } from '../Input/Input';
 import { Button } from '../Button/Button';
 import { selectNewTodo } from '../../selectors';
-import { setTodo } from '../../actions';
+import { createData, setTodo } from '../../actions';
 import { ACTIONS } from '../../constants';
 
-export const AddTodoForm = ({ createData }) => {
+export const AddTodoForm = () => {
 	const dispatch = useDispatch();
 	const newTodo = useSelector(selectNewTodo);
 
 	const handleAddTodo = (event) => {
 		event.preventDefault();
 		if (newTodo.trim()) {
-			createData({
-				title: newTodo,
-				completed: false,
-			});
+			dispatch(
+				createData({
+					title: newTodo,
+					completed: false,
+				}),
+			);
 			dispatch(setTodo(''));
 		}
 	};

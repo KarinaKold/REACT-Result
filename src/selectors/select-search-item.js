@@ -1,1 +1,1 @@
-export const selectSearchItem = (state) => state.searchItem;
+export const selectSearchItem = (state) => state.app.searchItem;
