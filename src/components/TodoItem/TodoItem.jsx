@@ -71,7 +71,6 @@ export const TodoItem = ({ id, title, completed }) => {
 			<Button
 				action={isDelete}
 				handleClick={onDelete.bind(null, id)}
-				disabled={isDelete}
 				clickName={ACTIONS.delete}
 			/>
 		</div>

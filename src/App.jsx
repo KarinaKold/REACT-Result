@@ -3,16 +3,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useDebounce } from './hooks';
 import styles from './App.module.css';
 import { TodoList, AddTodoForm, Input, Button, Loader, EmptyMessage } from './components';
-import { selectOrder, selectSearchItem, selectSortStatus } from './selectors';
-import { setSearchItem, setOrder, setSortStatus } from './actions';
+import {
+	selectData,
+	selectError,
+	selectLoading,
+	selectOrder,
+	selectSearchItem,
+	selectSortStatus,
+} from './selectors';
+import { setSearchItem, setOrder, setSortStatus, fetchData } from './actions';
 import { ACTIONS, ORDER } from './constants';
-import { fetchData } from './actions/fetch-data-requests';
 
 export const App = () => {
 	const dispatch = useDispatch();
-	const data = useSelector((state) => state.data.data);
-	const loading = useSelector((state) => state.data.loading);
-	const error = useSelector((state) => state.data.error);
+	const data = useSelector(selectData);
+	const loading = useSelector(selectLoading);
+	const error = useSelector(selectError);
 	const order = useSelector(selectOrder);
 	const searchItem = useSelector(selectSearchItem);
 	const isSorted = useSelector(selectSortStatus);
