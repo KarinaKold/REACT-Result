@@ -1,8 +1,8 @@
 import styles from './Button.module.css';
 
-export const Button = ({ actionState, handleClick, clickName }) => {
+export const Button = ({ action, handleClick, clickName }) => {
 	return (
-		<button className={styles.button} disabled={actionState} onClick={handleClick}>
+		<button className={styles.button} disabled={action} onClick={handleClick}>
 			{clickName}
 		</button>
 	);

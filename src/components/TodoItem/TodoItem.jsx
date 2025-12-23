@@ -6,9 +6,8 @@ import { Input } from '../Input/Input';
 import { ACTIONS } from '../../constants';
 import { deleteData, updateData } from '../../actions';
 
-export const TodoItem = ({ id, title, completed }) => {
+export const TodoItem = ({ id, title, completed, isEditing, onEdit, onCancelEdit }) => {
 	const dispatch = useDispatch();
-	const [isUpdate, setIsUpdate] = useState(false);
 	const [isDelete, setIsDelete] = useState(false);
 	const [updateValue, setUpdateValue] = useState(title);
 
@@ -19,25 +18,30 @@ export const TodoItem = ({ id, title, completed }) => {
 	};
 
 	const handleUpdate = () => {
-		setIsUpdate((prev) => !prev);
+		isEditing ? onCancelEdit() : onEdit(id);
 	};
 
 	const onUpdate = (id, payload) => {
-		dispatch(updateData(id, payload));
-		setIsUpdate(false);
+		if (updateValue === '') {
+			onDelete(id);
+		} else {
+			dispatch(updateData(id, payload));
+		}
+		onCancelEdit();
 	};
 
 	return (
 		<div>
-			{isUpdate ? (
+			{isEditing ? (
 				<>
 					<Input
 						type="text"
+						id={`text-${id}`}
 						value={updateValue}
 						onChange={(e) => setUpdateValue(e.target.value)}
 					/>
 					<Button
-						action={isUpdate}
+						action={!isEditing}
 						handleClick={onUpdate.bind(null, id, {
 							title: updateValue,
 						})}
@@ -62,7 +66,7 @@ export const TodoItem = ({ id, title, completed }) => {
 						<div className={completed ? styles.completed : ''}>{title}</div>
 					</div>
 					<Button
-						action={isUpdate}
+						action={isEditing}
 						handleClick={handleUpdate}
 						clickName={ACTIONS.update}
 					/>
