@@ -1,12 +1,15 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './information.module.css';
 
 export class InformationLayout extends Component {
 	render() {
 		const { status } = this.props;
 
-		return <div className={styles.info}>{status}</div>;
+		return (
+			<div className="text-2xl text-black bg-amber-400 p-2.5 mb-5 rounded-sm">
+				{status}
+			</div>
+		);
 	}
 }
 
